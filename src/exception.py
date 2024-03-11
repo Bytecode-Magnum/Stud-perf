@@ -1,6 +1,7 @@
 import sys
 import logging
 
+#: this function take the error which is raise using raise CustomException(e,sys), and we design a custom exception message
 def error_message_details(error,error_detail:sys):
   _,_,exc_tb=error_detail.exc_info()
   file_name=exc_tb.tb_frame.f_code.co_filename  #: file name in which the error is occured
@@ -10,9 +11,10 @@ def error_message_details(error,error_detail:sys):
   return error_message
 
 class CustomException(Exception):
-  def __init__(self,error_message,error_detail:sys) :
+  def __init__(self,error_message,error_detail:sys) :   #: CustomException(e,sys)
     super().__init__(error_message)
-    self.error_message=error_message_details(error_message,error_detail=error_detail)
+    self.error_message=error_message_details(error_message,error_detail=error_detail) 
+     #: formatted the error  message using error_message_details function
 
 
   def __str__(self):

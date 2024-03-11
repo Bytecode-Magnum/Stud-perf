@@ -7,15 +7,19 @@ import seaborn as sns
 from sklearn.model_selection import train_test_split
 from dataclasses import dataclass
 
+from src.components.data_transformation import DataTransformation
+from src.components.data_transformation import DataTransformationConfig
+
+from src.components.model_trainer import ModelTrainer
 
 #: we are defining the path for the train, test and raw data
-#: typically a class nmeed a constructor ie __init__ function, but the dataclass doesnt need, it creates the constructor
+#: typically a class need a constructor ie __init__ function, but the dataclass doesn't need, it creates the constructor
 #: on its own
 @dataclass
 class DataIngestionConfig:
-  train_data_path:str=os.path.join("artifacts",'train.csv')
-  test_data_path:str=os.path.join("artifacts",'test.csv')
-  raw_data_path:str=os.path.join("artifacts",'data.csv')
+  train_data_path=os.path.join("artifacts",'train.csv')   #: artifact is dir name and train.csv is file name
+  test_data_path=os.path.join("artifacts",'test.csv')
+  raw_data_path=os.path.join("artifacts",'data.csv')
   
 
 class DataIngestion:
@@ -47,4 +51,10 @@ class DataIngestion:
 
 if __name__=="__main__":
   obj=DataIngestion()
-  obj.initiate_data_ingestion()
+  train_data,test_data=obj.initiate_data_ingestion()
+
+  data_transformation=DataTransformation()
+  train_arr,test_arr,_=data_transformation.initiate_data_transformation(train_data,test_data)
+
+  model_trainer=ModelTrainer()
+  print(model_trainer.initiate_model_trainer(train_arr,test_arr))
