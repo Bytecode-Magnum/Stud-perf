@@ -16,7 +16,6 @@ class CustomException(Exception):
     self.error_message=error_message_details(error_message,error_detail=error_detail) 
      #: formatted the error  message using error_message_details function
 
-
   def __str__(self):
     return self.error_message
 

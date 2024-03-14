@@ -1,12 +1,14 @@
 import sys
 from dataclasses import dataclass
 
+
 import numpy as np 
 import pandas as pd
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder,StandardScaler
+
 
 from src.exception import CustomException
 from src.logger import logging
@@ -16,7 +18,7 @@ from src.utils import save_object
 
 @dataclass
 class DataTransformationConfig:
-    preprocessor_obj_file_path=os.path.join('artifacts',"proprocessor.pkl")
+    preprocessor_obj_file_path=os.path.join('artifacts',"proprocessor.pkl")  #: this the path for proprocess +
 
 class DataTransformation:
     def __init__(self):
@@ -25,7 +27,6 @@ class DataTransformation:
     def get_data_transformer_object(self):
         '''
         This function is responsible for data trnasformation
-        
         '''
         try:
             numerical_columns = ["writing_score", "reading_score"]
@@ -36,7 +37,8 @@ class DataTransformation:
                 "lunch",
                 "test_preparation_course",
             ]
-
+            #: we create different pipeline and combine using column transformer.
+            #: pipeline in sklearn are used with column transformer.
             num_pipeline= Pipeline(
                 steps=[
                 ("imputer",SimpleImputer(strategy="median")),
@@ -46,7 +48,6 @@ class DataTransformation:
             )
 
             cat_pipeline=Pipeline(
-
                 steps=[
                 ("imputer",SimpleImputer(strategy="most_frequent")),
                 ("one_hot_encoder",OneHotEncoder()),
@@ -58,15 +59,15 @@ class DataTransformation:
             logging.info(f"Categorical columns: {categorical_columns}")
             logging.info(f"Numerical columns: {numerical_columns}")
 
+
             preprocessor=ColumnTransformer(
                 [
                 ("num_pipeline",num_pipeline,numerical_columns),
                 ("cat_pipelines",cat_pipeline,categorical_columns)
 
                 ]
-
-
             )
+
 
             return preprocessor
         
@@ -83,7 +84,7 @@ class DataTransformation:
 
             logging.info("Obtaining preprocessing object")
 
-            preprocessing_obj=self.get_data_transformer_object()
+            preprocessing_obj=self.get_data_transformer_object()   #: the function data transformation return the preprocessor object  
 
             target_column_name="math_score"
             numerical_columns = ["writing_score", "reading_score"]
@@ -114,7 +115,7 @@ class DataTransformation:
                 obj=preprocessing_obj
 
             )
-
+            #: we return the train and test arr from the function
             return (
                 train_arr,
                 test_arr,
